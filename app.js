@@ -1,9 +1,10 @@
 const express = require('express');
+require('dotenv').config();
 
 const Users = require('./src/Models/User.js');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 4000;
 
 function generateSecureString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
