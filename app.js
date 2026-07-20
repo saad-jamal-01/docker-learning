@@ -1,17 +1,43 @@
 const express = require('express');
+
+const Users = require('./src/Models/User.js');
+
 const app = express();
 const PORT = 3000;
 
+function generateSecureString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const randomValues = new Uint32Array(length);
+    
+    crypto.getRandomValues(randomValues); 
+    
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += characters[randomValues[i] % characters.length];
+    }
+    
+    return result;
+}
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.get('/api/data', (req, res) => {
-  res.json({ message: "Success", status: 200 });
+app.get('/api/user', async (req, res) => {
+    const users = await Users.findAll();
+    return res.json({ users });
+});
+
+app.post('/api/user', async (req, res) => {
+    const newUser = await Users.create({
+        firstName: generateSecureString(10),
+        lastName: generateSecureString(6)
+    });
+
+    return res.json({ user: newUser });
 });
 
 
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });
