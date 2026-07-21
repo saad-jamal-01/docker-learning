@@ -15,3 +15,29 @@ To run
   - `3000:3000` first 3000 indicated the OS's port and the second one indicated docker container's port
   - `--name` indicates name of the container
   - `-rm` means the container shall be removed when stopped
+
+
+# Day-04
+  - Go to the root directory of this project
+  - Run `docker compose up -d --build`
+  - To remove the volule, run `docker compose down -v`
+  - To find the docker volume, run `docker volume inspect <volume_name>`
+
+For the volume created for this docker-compose file, the specification is
+```json
+[
+    {
+        "CreatedAt": "2026-07-21T13:26:27Z",
+        "Driver": "local",
+        "Labels": {
+            "com.docker.compose.project": "node-dockerize",
+            "com.docker.compose.version": "2.7.0",
+            "com.docker.compose.volume": "pg_data"
+        },
+        "Mountpoint": "/var/lib/docker/volumes/node-dockerize_pg_data/_data",
+        "Name": "node-dockerize_pg_data",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+```
