@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    image: localhost:5000/local-registry-node
+    container_name: lr-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://postgres:Jeem99999@db:5432/docker-test
+      - PORT=3000
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: localhost:5000/local-registry-postgres
+    container_name: lr-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Jeem99999
+      - POSTGRES_DB=docker-test
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d docker-test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg_data:
