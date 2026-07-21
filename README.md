@@ -41,3 +41,18 @@ For the volume created for this docker-compose file, the specification is
     }
 ]
 ```
+
+# Day-05
+
+From previous day's task, there are already two images. To create a local docker registry, run `docker run -d -p 5000:5000 --name registry registry:2` command.
+  - local registry's name will be `registry` specified by `--name registry`
+  - We are pulling `registry:2` image from docker hub to create this local registry
+
+Now run following command
+  - `docker tag <local_image> localhost:5000/<new_name>` [currently we have 2 images for db and backend]. For the time being, use the following commands.
+    - `docker tag <local_backend_image> localhost:5000/lr_node-dockerize_backend`
+    - `docker tag <local_db_image> localhost:5000/lr_postgres`
+
+  - Now push the newly tagged images by `docker push localhost:5000/<new_name>`
+  - Now remove all the image except `registry` from local machine.
+  - Run `docker compose -f .\docker-compose-lr.yml up -d --build` 

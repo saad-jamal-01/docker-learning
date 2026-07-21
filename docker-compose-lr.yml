@@ -2,19 +2,21 @@ version: '3.8'
 
 services:
   backend:
-    image: localhost:5000/local-registry-node
+    image: localhost:5000/lr_node-dockerize_backend
     container_name: lr-backend
     ports:
       - "3000:3000"
     environment:
       - PORT=${PORT}
     restart: unless-stopped
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
 
   db:
-    image: localhost:5000/local-registry-postgres
+    image: localhost:5000/lr_postgres
     container_name: lr-postgres
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
