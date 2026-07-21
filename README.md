@@ -1,0 +1,17 @@
+# Day-3
+  - Go to the root directory of this project
+  - Run `docker build -t node_app:single -f Dockerfile.single .`
+  - Run `docker build -t node_app:multi -f Dockerfile.multi .`
+
+After running these two commands, two new images will be created. Run `docker images` to see the newly created images. Their differences in size is clearly visible there. A screenshot has been added under `resources` directory.
+
+To run
+  - docker single-staged image, run `docker run -d -p 3000:3000 --name node-single --rm node_app:single`
+  - docker multi-staged image, run `docker run -d -p 3000:3000 --name node-multi --rm node_app:multi`
+
+### Explanation
+  - `-d` means the container will be run on detach mode
+  - `-p` indicates port number
+  - `3000:3000` first 3000 indicated the OS's port and the second one indicated docker container's port
+  - `--name` indicates name of the container
+  - `-rm` means the container shall be removed when stopped
