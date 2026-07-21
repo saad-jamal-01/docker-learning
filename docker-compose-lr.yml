@@ -7,8 +7,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgres://postgres:Jeem99999@db:5432/docker-test
-      - PORT=3000
+      - PORT=${PORT}
     restart: unless-stopped
     depends_on:
       db:
@@ -18,9 +17,9 @@ services:
     image: localhost:5000/local-registry-postgres
     container_name: lr-postgres
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=Jeem99999
-      - POSTGRES_DB=docker-test
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
