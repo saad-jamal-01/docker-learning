@@ -1,7 +1,9 @@
+import UsersPage from './features/users/components/UsersPage';
+
 import './App.css';
 
 function App() {
-  return <div>Hello world</div>;
+  return <UsersPage />;
 }
 
 export default App;
