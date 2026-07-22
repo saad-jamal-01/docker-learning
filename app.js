@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/user', async (req, res) => {
     const users = await Users.findAll();
-    return res.json({ users });
+    return res.json({ users, totalUserCount: users.length });
 });
 
 app.post('/api/user', async (req, res) => {
