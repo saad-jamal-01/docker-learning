@@ -4,8 +4,8 @@ services:
   backend:
     image: localhost:5000/backend:latest
     build:
-      context: .
-      dockerfile: Dockerfile.multi
+      context: ./backend
+      dockerfile: Dockerfiles/Dockerfile.multi
     ports:
       - "3000:3000"
     environment:
