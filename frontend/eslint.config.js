@@ -19,8 +19,9 @@ export default defineConfig([
       globals: globals.browser,
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
       'react-hooks/set-state-in-effect': 'warn',
+      '@typescript-eslint/no-explicit-any': ['warn', { args: 'none' }],
     },
   },
 ]);

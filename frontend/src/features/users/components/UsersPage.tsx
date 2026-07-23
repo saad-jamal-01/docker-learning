@@ -11,6 +11,7 @@ const UsersPage = () => {
   const [loading, setLoading] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [users, setUsers] = useState<UserType[]>([]);
 
   const handleAddUser = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,8 +32,10 @@ const UsersPage = () => {
 
   const onFetchUsersList = async () => {
     setLoading(true);
+
     try {
-      await fetchUsersList();
+      const usersList = await fetchUsersList();
+      setUsers(usersList);
     } catch (err) {
       console.log('error fetching users: ', err);
     } finally {
@@ -57,8 +60,8 @@ const UsersPage = () => {
           <div>Fetching users ...</div>
         ) : (
           <div className="space-y-4 pt-2">
-            {[].map((user) => (
-              <UserCard user={user} />
+            {users.map((user) => (
+              <UserCard key={`user-card-${user.id}`} user={user} />
             ))}
           </div>
         )}
