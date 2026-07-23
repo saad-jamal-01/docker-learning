@@ -3,7 +3,7 @@ name: Local Compose Build and Push
 on:
   push:
     branches:
-      - '**'
+      - develop
   workflow_dispatch:
 
 jobs:
@@ -21,6 +21,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate .env File
+        env:
+          PORT: ${{ secrets.PORT }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: |
           cat <<EOF > .env
           PORT=${PORT}
@@ -30,7 +37,9 @@ jobs:
           POSTGRES_HOST=${POSTGRES_HOST}
           VITE_API_URL=${VITE_API_URL}
           EOF
-          echo "--- Generated .env File Content ---"
+
+          # Optional: Mask sensitive passwords if printing for debugging
+          echo "--- Generated .env File ---"
           cat .env
 
       - name: Build Images
