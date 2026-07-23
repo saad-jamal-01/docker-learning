@@ -67,6 +67,16 @@ Now run following command
 
 Follow these instrctions to run frontend
 
+### Run the backend and db container via docker-compose and frontend container separately.
+
 - Run `docker compose up -d --build` to run the backend.
 - Run `docker build -f .\frontend\Dockerfile -t frontend:multi  .\frontend\` at the project root folder.
 - Run `docker run -d -p 5173:80 --name frontend frontend:multi`
+
+### Run frontend, backend and db container at a time
+
+- Run `docker compose up -d --build` command.
+- Ensure local registry is running at port `5000`.
+- Run `act push --container-architecture linux/amd64` at the command prompt of project's root directory. This will push the newly built image of frontend and backend.
+- To check the images hosted under local registry, run `curl -X GET http://localhost:5000/v2/_catalog` command.
+- Now frontend/backend/db images from local machine (not local registry) can be deleted. Then again run `docker compose -f .\docker-compose-lr.yml up -d --build` to pull the images from local registry.
