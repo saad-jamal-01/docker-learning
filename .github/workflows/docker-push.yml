@@ -4,10 +4,17 @@ on:
   push:
     branches:
       - '**'
+  workflow_dispatch:
 
 jobs:
   compose-pipeline:
     runs-on: ubuntu-latest
+
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
 
     steps:
       - name: Checkout Code
