@@ -26,3 +26,20 @@ export const fetchUsersList = async () => {
 
   return usersList;
 };
+
+export const createUser = async (firstName: string, lastName: string) => {
+  const url = `${import.meta.env.VITE_API_URL}/user`;
+
+  const { status } = await axios({
+    url,
+    method: 'POST',
+    data: {
+      firstName,
+      lastName,
+    },
+  });
+
+  if (status > 299) {
+    throw new Error();
+  }
+};
