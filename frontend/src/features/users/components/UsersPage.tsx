@@ -48,23 +48,25 @@ const UsersPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-amber-300 text-gray-900 p-6 flex items-center justify-center select-none">
-      <div className="w-full bg-amber-700 max-w-sm flex flex-row">
+    <div className="h-screen w-full text-gray-900 flex items-center justify-center select-none overflow-hidden">
+      <div className="h-full max-h-[90vh] px-16 sm:px-6 flex flex-col sm:flex-row gap-6 items-center">
         <UserForm
           firstName={firstName}
           lastName={lastName}
           onNameChange={onNameChange}
           handleAddUser={handleAddUser}
         />
-        {loading ? (
-          <div>Fetching users ...</div>
-        ) : (
-          <div className="space-y-4 pt-2">
-            {users.map((user) => (
-              <UserCard key={`user-card-${user.id}`} user={user} />
-            ))}
-          </div>
-        )}
+        <div className="h-full max-h-full overflow-y-auto pr-2">
+          {loading ? (
+            <div>Fetching users ...</div>
+          ) : (
+            <div className="space-y-4 pt-2">
+              {[...users, ...users, ...users].map((user) => (
+                <UserCard key={`user-card-${user.id}`} user={user} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
