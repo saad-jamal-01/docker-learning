@@ -2,16 +2,18 @@ const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
 const sequelize = new Sequelize(
-    process.env.POSTGRES_DB,
-    process.env.POSTGRES_USER,
-    process.env.POSTGRES_PASSWORD, {
-        host: 'db',
-        dialect: 'postgres',
-    },
+  process.env.POSTGRES_DB,
+  process.env.POSTGRES_USER,
+  process.env.POSTGRES_PASSWORD,
+  {
+    host: process.env.POSTGRES_HOST,
+    dialect: 'postgres',
+  }
 );
 
-sequelize.authenticate()
-    .then(() => console.log('DB connected'))
-    .catch(error => console.log('Error at db connection: ', error.message));
+sequelize
+  .authenticate()
+  .then(() => console.log('DB connected'))
+  .catch((error) => console.log('Error at db connection: ', error.message));
 
 module.exports = sequelize;
