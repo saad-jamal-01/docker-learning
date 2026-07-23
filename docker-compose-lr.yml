@@ -1,11 +1,25 @@
 version: '3.8'
 
 services:
+  frontend:
+    image: localhost:5000/frontend:latest
+    container_name: lr-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL}
+    ports:
+      - '5173:5173'
+    restart: unless-stopped
+    depends_on:
+      - backend
+
   backend:
-    image: localhost:5000/lr_node-dockerize_backend
+    image: localhost:5000/backend:latest
     container_name: lr-backend
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - PORT=${PORT}
     restart: unless-stopped
@@ -16,19 +30,19 @@ services:
         condition: service_healthy
 
   db:
-    image: localhost:5000/lr_postgres
+    image: postgres:16-alpine
     container_name: lr-postgres
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - '5432'
     volumes:
       - pg_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
       interval: 5s
       timeout: 5s
       retries: 5
