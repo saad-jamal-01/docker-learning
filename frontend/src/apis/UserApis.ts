@@ -43,3 +43,16 @@ export const createUser = async (firstName: string, lastName: string) => {
     throw new Error();
   }
 };
+
+export const deleteUser = async (userId: string) => {
+  const url = `${import.meta.env.VITE_API_URL}/user/${userId}`;
+
+  const { status } = await axios({
+    url,
+    method: 'DELETE',
+  });
+
+  if (status > 299) {
+    throw new Error();
+  }
+};

@@ -39,13 +39,20 @@ const UsersPage = () => {
         <UserForm
           onAddUser={() => setToggleToRenderPage((prevState) => !prevState)}
         />
-        <div className="h-full max-h-full overflow-y-auto pr-2">
+        <div className="h-full max-h-full w-75 overflow-y-auto pr-2">
           {loading ? (
             <div>Fetching users ...</div>
           ) : (
             <div className="space-y-4 pt-2">
-              {users.map((user) => (
-                <UserCard key={`user-card-${user.id}`} user={user} />
+              {users.map((user, index) => (
+                <UserCard
+                  key={`user-card-${user.id}`}
+                  user={user}
+                  index={index}
+                  onDeleteUser={() =>
+                    setToggleToRenderPage((prevState) => !prevState)
+                  }
+                />
               ))}
             </div>
           )}
