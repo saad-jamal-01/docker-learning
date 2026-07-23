@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { deleteUser } from '../../../apis/UserApis';
 
 import type { UserType } from '../types';
@@ -11,15 +12,32 @@ const UserCard = ({
   index: number;
   onDeleteUser: () => void;
 }) => {
+  const [toast, setToast] = useState({
+    show: false,
+    message: '',
+    type: 'success',
+  });
+
+  const showToast = (message: string, type: 'success' | 'error') => {
+    setToast({ show: true, message, type });
+
+    setTimeout(() => {
+      setToast((prev) => ({ ...prev, show: false }));
+    }, 3000);
+  };
+
   const handleDeleteUser = async () => {
     try {
       await deleteUser(user.id);
       onDeleteUser();
-    } catch (err) {}
+      showToast('User deleted', 'success');
+    } catch (err) {
+      showToast('Error deleting user', 'error');
+    }
   };
 
-  return (
-    <div className="p-4 border rounded-xl bg-white shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] space-y-1">
+  const renderTopRow = () => {
+    return (
       <div className="flex items-center justify-between mb-2">
         <p className="text font-bold leading-tight">
           User: <span className="font-normal">{index + 1}</span>
@@ -44,6 +62,34 @@ const UserCard = ({
           <line x1="14" y1="11" x2="14" y2="17"></line>
         </svg>
       </div>
+    );
+  };
+
+  const renderToast = () => {
+    if (!toast.show) {
+      return;
+    }
+
+    return (
+      <div
+        className={`fixed bottom-5 right-5 flex items-center gap-3 px-4 py-3 rounded shadow-lg text-white transition-all
+          ${toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}
+      >
+        <span>{toast.type === 'success' ? '✅' : '❌'}</span>
+        <p className="text-sm font-medium">{toast.message}</p>
+        <button
+          onClick={() => setToast({ ...toast, show: false })}
+          className="ml-3 font-bold opacity-70 hover:opacity-100"
+        >
+          ✕
+        </button>
+      </div>
+    );
+  };
+
+  return (
+    <div className="p-4 border rounded-xl bg-white shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] space-y-1">
+      {renderTopRow()}
       <p className="text font-bold leading-tight">
         First Name: <span className="font-normal">{user.firstName}</span>
       </p>
@@ -56,6 +102,7 @@ const UserCard = ({
       <p className="text font-bold leading-tight">
         Added on: <span className="font-normal">{user.addedOn}</span>
       </p>
+      {renderToast()}
     </div>
   );
 };
