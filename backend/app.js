@@ -29,21 +29,24 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.get('/api/user', async (req, res) => {
+app.get('/api/user', async (req, res, next) => {
   try {
     const users = await Users.findAll();
     return res.json({ users, totalUserCount: users.length });
   } catch (err) {
-    return res.status(500).json({ message: 'Error fetching users list' });
+    next(new Error('Error fetching users list'));
   }
 });
 
-app.post('/api/user', async (req, res) => {
+app.post('/api/user', async (req, res, next) => {
   try {
     const { firstName, lastName } = req.body;
 
     if (!firstName || firstName.trim().length === 0) {
-      throw new Error('First name is required');
+      res.status(400);
+      const error = new Error('First name is required');
+
+      return next(error);
     }
 
     const newUser = await Users.create({
@@ -53,11 +56,11 @@ app.post('/api/user', async (req, res) => {
 
     return res.json({ user: newUser });
   } catch (err) {
-    return res.status(500).json({ message: 'Error creating user' });
+    next(new Error('Error creating user'));
   }
 });
 
-app.delete('/api/user/:id', async (req, res) => {
+app.delete('/api/user/:id', async (req, res, next) => {
   try {
     const userId = req.params.id;
 
@@ -69,8 +72,28 @@ app.delete('/api/user/:id', async (req, res) => {
 
     return res.status(200).json({ message: 'User deleted' });
   } catch (err) {
-    return res.status(500).json({ message: 'Error deleting user' });
+    next(new Error('Error deleting user'));
   }
+});
+
+app.use((req, res, next) => {
+  const error = new Error(`Not Found - ${req.originalUrl}`);
+
+  res.status(404);
+  next(error);
+});
+
+app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+  });
 });
 
 app.listen(PORT, () => {
