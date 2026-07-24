@@ -8,7 +8,9 @@ class Logger extends EventEmitter {
     super();
 
     this.logDir =
-      options.logDir || path.resolve(__dirname, '../../../logs/backend');
+      process.env.LOG_DIR ||
+      options.logDir ||
+      path.resolve(__dirname, '../../../logs/backend');
     this.logLevel = options.level || 'info';
 
     this.levels = {
