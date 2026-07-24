@@ -94,10 +94,7 @@ const UserCard = ({
         First Name: <span className="font-normal">{user.firstName}</span>
       </p>
       <p className="text font-bold leading-tight">
-        Last Name:{' '}
-        <span className="font-normal">
-          {user.lastName} jkhugrfhvjhnucbgceyugxfunhej
-        </span>
+        Last Name: <span className="font-normal">{user.lastName}</span>
       </p>
       <p className="text font-bold leading-tight">
         Added on: <span className="font-normal">{user.addedOn}</span>
