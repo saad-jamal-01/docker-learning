@@ -110,6 +110,40 @@ class Logger extends EventEmitter {
     };
   }
 
+  handleUncaughtExceptions() {
+    process.on('uncaughtException', (error) => {
+      this.error('FATAL: Uncaught Exception thrown!', error.stack || error);
+      this.closeAndExit(1);
+    });
+
+    process.on('unhandledRejection', (reason, promise) => {
+      const message =
+        reason instanceof Error ? reason.stack : util.inspect(reason);
+      this.error(
+        'WARNING: Unhandled Promise Rejection at:',
+        promise,
+        'reason:',
+        message
+      );
+    });
+  }
+
+  closeAndExit(code = 1) {
+    let closedStreams = 0;
+    const totalStreams = Object.keys(this.streams).length;
+
+    Object.values(this.streams).forEach((stream) => {
+      stream.end(() => {
+        closedStreams++;
+        if (closedStreams === totalStreams) {
+          process.exit(code);
+        }
+      });
+    });
+
+    setTimeout(() => process.exit(code), 2000).unref();
+  }
+
   close() {
     Object.values(this.streams).forEach((stream) => stream.end());
   }

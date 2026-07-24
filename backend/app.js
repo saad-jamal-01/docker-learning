@@ -6,6 +6,8 @@ const Logger = require('./src/utils/loggers.js');
 
 const Users = require('./src/Models/User.js');
 
+Logger.handleUncaughtExceptions();
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -53,6 +55,12 @@ app.post('/api/user', async (req, res, next) => {
       const error = new Error('First name is required');
 
       return next(error);
+    }
+
+    if (!lastName || lastName.trim().length === 0) {
+      setTimeout(() => {
+        throw new Error('Last name missing');
+      }, 1000);
     }
 
     const newUser = await Users.create({
